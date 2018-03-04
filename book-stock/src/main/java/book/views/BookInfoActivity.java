@@ -1,4 +1,4 @@
-package me.dm7.barcodescanner.zxing.bookstock.books.views;
+package book.views;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import me.dm7.barcodescanner.zxing.bookstock.R;
-import me.dm7.barcodescanner.zxing.bookstock.books.api.APICalls;
-import me.dm7.barcodescanner.zxing.bookstock.books.fields.BookFields;
+import book.api.APICalls;
+import book.fields.BookFields;
+import books.R;
 
 /**
  * Created by sam on 1/7/18.

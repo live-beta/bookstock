@@ -1,7 +1,7 @@
-package me.dm7.barcodescanner.zxing.bookstock.books.fields;
+package book.fields;
 
 /**
- * Book fields, class with the books model
+ * Book fields, class with the book model
  */
 
 public class BookFields {

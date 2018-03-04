@@ -1,4 +1,4 @@
-package me.dm7.barcodescanner.zxing.bookstock.books.views;
+package book.views;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,10 +19,9 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-import me.dm7.barcodescanner.zxing.bookstock.R;
-import me.dm7.barcodescanner.zxing.bookstock.books.Books.BookAdapter;
-import me.dm7.barcodescanner.zxing.bookstock.books.api.APICalls;
-import me.dm7.barcodescanner.zxing.bookstock.books.fields.BookFields;
+import book.Books.BookAdapter;
+import book.api.APICalls;
+import books.R;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ZXING_CAMERA_PERMISSION = 1;

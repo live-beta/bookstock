@@ -1,4 +1,4 @@
-package me.dm7.barcodescanner.zxing.bookstock.books.views;
+package book.views;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,17 +13,16 @@ import com.google.zxing.Result;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import book.api.APICalls;
+import book.fields.BookFields;
+import books.R;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
-import me.dm7.barcodescanner.zxing.bookstock.R;
-//import me.dm7.barcodescanner.zxing.bookstock.books.Books.MainBooksActivity;
-import me.dm7.barcodescanner.zxing.bookstock.books.api.APICalls;
-import me.dm7.barcodescanner.zxing.bookstock.books.fields.BookFields;
 
 public class SimpleScannerActivity extends BaseScannerActivity implements ZXingScannerView.ResultHandler {
     private final Context context = this;
     BookFields bookFields = new BookFields();
     private ZXingScannerView mScannerView;
-    private String title, subTitle, authors, categories, description, publishedDate,isbn, industryIdentifiers;
+    private String title, subTitle, authors, categories, description, publishedDate, isbn, industryIdentifiers;
 
     @Override
     public void onCreate(Bundle state) {
@@ -115,7 +114,7 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
         intent.putExtra("categories", bookFields.getCategories());
         intent.putExtra("description", bookFields.getDescription());
         intent.putExtra("publishedDate", bookFields.getPublishedDate());
-        intent.putExtra("isbn",isbn);
+        intent.putExtra("isbn", isbn);
 
 
         startActivity(intent);

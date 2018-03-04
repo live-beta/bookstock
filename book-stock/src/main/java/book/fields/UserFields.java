@@ -1,4 +1,4 @@
-package me.dm7.barcodescanner.zxing.bookstock.books.fields;
+package book.fields;
 
 /**
  * User Variables

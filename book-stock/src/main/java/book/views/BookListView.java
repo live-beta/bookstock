@@ -1,4 +1,4 @@
-package me.dm7.barcodescanner.zxing.bookstock.books.views;
+package book.views;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,9 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-
-import me.dm7.barcodescanner.zxing.bookstock.R;
-import me.dm7.barcodescanner.zxing.bookstock.books.fields.BookFields;
+import book.fields.BookFields;
+import books.R;
 
 /**
  * Class implements Recycler view for book Views

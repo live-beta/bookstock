@@ -1,4 +1,4 @@
-package me.dm7.barcodescanner.zxing.bookstock.books.api;
+package book.api;
 
 import android.os.StrictMode;
 import android.util.Log;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import me.dm7.barcodescanner.zxing.bookstock.books.fields.BookFields;
+import book.fields.BookFields;
 
 /**
  * Class Implements BucketList API calls
@@ -102,7 +102,7 @@ public class APICalls {
 
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet("https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn);
+        HttpGet httpGet = new HttpGet("https://www.googleapis.com/book/v1/volumes?q=isbn:" + isbn);
 
 
         try {
@@ -132,7 +132,7 @@ public class APICalls {
         } else {
 
             HttpClient httpClient = new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet("http://10.0.2.2:5000/api/v1/books?limit=1000");
+            HttpGet httpGet = new HttpGet("http://10.0.2.2:5000/api/v1/book?limit=1000");
             httpGet.addHeader("Content-Type", "application/x-www-form-urlencoded");
             httpGet.addHeader("Authorization", "Bearer " + token);
 
@@ -183,7 +183,7 @@ public class APICalls {
         } else {
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("http://10.0.2.2:5000/api/v1/books");
+            HttpPost httpPost = new HttpPost("http://10.0.2.2:5000/api/v1/book");
             httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
             httpPost.addHeader("Authorization", "Bearer " + token);
 

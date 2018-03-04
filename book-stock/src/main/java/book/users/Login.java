@@ -1,4 +1,4 @@
-package me.dm7.barcodescanner.zxing.bookstock.books.users;
+package book.users;
 
 /**
  * Created by sam on 12/20/17.
@@ -15,9 +15,9 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Toast;
 
-import me.dm7.barcodescanner.zxing.bookstock.books.views.MainActivity;
-import me.dm7.barcodescanner.zxing.bookstock.R;
-import me.dm7.barcodescanner.zxing.bookstock.books.bookMethods.Books;
+import book.views.MainActivity;
+import book.bookMethods.Books;
+import books.R;
 
 
 public class Login extends Activity {
@@ -54,7 +54,7 @@ public class Login extends Activity {
 
                 if (status){
 
-                    Toast.makeText(getApplicationContext(),"yaaay! I got in",
+                    Toast.makeText(getApplicationContext(),"Login success",
                             Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, MainActivity.class);
                     startActivity(intent);

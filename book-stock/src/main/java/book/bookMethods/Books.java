@@ -1,4 +1,4 @@
-package me.dm7.barcodescanner.zxing.bookstock.books.bookMethods;
+package book.bookMethods;
 
 /**
  * Created by sam on 12/20/17.
@@ -7,12 +7,11 @@ package me.dm7.barcodescanner.zxing.bookstock.books.bookMethods;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
-import me.dm7.barcodescanner.zxing.bookstock.books.api.APICalls;
-import me.dm7.barcodescanner.zxing.bookstock.books.fields.BookFields;
-import me.dm7.barcodescanner.zxing.bookstock.books.fields.UserFields;
+import book.api.APICalls;
+import book.fields.BookFields;
+import book.fields.UserFields;
 
 
 public class Books {
