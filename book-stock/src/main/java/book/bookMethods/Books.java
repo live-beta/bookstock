@@ -20,21 +20,21 @@ public class Books {
     Collection<List<BookFields>> allBooks = new ArrayList<>();
     List<BookFields> booklists = new ArrayList<>();
     //    ItemFields itemFields = new ItemFields();
-    UserFields userFields = new UserFields();
+    //UserFields userFields = new UserFields();
     APICalls apiCalls = new APICalls();
     private String title, subTitle, authors;
+//
+//    public Books(String userName, String password) {
+//
+//        this.userFields.setUserName(userName);
+//        this.userFields.setPassword(password);
+//    }
 
-    public Books(String userName, String password) {
-
-        this.userFields.setUserName(userName);
-        this.userFields.setPassword(password);
-    }
-
-    public boolean login() {
-
-        boolean status = apiCalls.login(userFields.getUserName(), userFields.getPassword());
-        return status;
-    }
+//    public boolean login() {
+//
+//        boolean status = apiCalls.login(userFields.getUserName(), userFields.getPassword());
+//        return status;
+//    }
 }
 
 

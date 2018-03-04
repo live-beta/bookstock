@@ -10,14 +10,24 @@ import android.os.StrictMode;
 import android.os.Bundle;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Toast;
 
+import book.api.APICalls;
+import book.fields.UserFields;
+import book.networking.NetworkCalls;
 import book.views.MainActivity;
 import book.bookMethods.Books;
 import books.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.POST;
 
 
 public class Login extends Activity {
@@ -46,23 +56,63 @@ public class Login extends Activity {
 
             @Override
             public void onClick(View view) {
-                Books books = new Books(userName.getText().toString(),
-                        password.getText().toString());
 
 
-                boolean status = books.login();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://10.0.2.2:5000/api/v1/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
 
-                if (status){
+                NetworkCalls networkCalls = retrofit.create(NetworkCalls.class);
+                UserFields userFields = new UserFields(userName.getText().toString(),password.getText().toString());
 
-                    Toast.makeText(getApplicationContext(),"Login success",
-                            Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, MainActivity.class);
-                    startActivity(intent);
+                Call<UserFields> loginCall = networkCalls.LoginCall(userFields);
+                loginCall.enqueue(new Callback<UserFields>(){
 
-                }else{
-                    Toast.makeText(getApplicationContext(),"Wrong Username or Password",
-                            Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onResponse(Call<UserFields> call, Response<UserFields> response) {
+
+
+                       if (response.body().getToken() != null){
+                           Intent intent = new Intent(context, MainActivity.class);
+                           startActivity(intent);
+                       }else{
+                           Toast.makeText(getApplicationContext(),"Wrong credentials",Toast.LENGTH_LONG).show();
+                       }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserFields> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(),"No response from server",Toast.LENGTH_LONG).show();
+                    }
+
+
+                } );
+
+
+
+
+
+
+
+////                Books books = new Books(userName.getText().toString(),
+////                        password.getText().toString());
+//
+//
+//                boolean status = books.login();
+//
+//                if (status){
+//
+//                    Toast.makeText(getApplicationContext(),"Login success",
+//                            Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(context, MainActivity.class);
+//                    startActivity(intent);
+//
+//                }else{
+//                    Toast.makeText(getApplicationContext(),"Wrong Username or Password",
+//                            Toast.LENGTH_SHORT).show();
+//                }
 
             }
         });

@@ -1,5 +1,6 @@
 package book.api;
 
+import android.content.res.Resources;
 import android.os.StrictMode;
 import android.util.Log;
 
@@ -23,6 +24,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import book.fields.BookFields;
+import book.fields.UserFields;
+import book.networking.NetworkCalls;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Class Implements BucketList API calls
@@ -38,11 +46,22 @@ public class APICalls {
         return this.token;
     }
 
+    /*Retrofit builder*/
+
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:5000/api/v1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
     public void setToken(String token) {
         this.token = token;
     }
 
-    public boolean login(String userName, String password) {
+    public boolean login(String  userName, String password) {
+
+        final boolean state;
+
+
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy =
@@ -50,48 +69,14 @@ public class APICalls {
             StrictMode.setThreadPolicy(policy);
         }
 
+
         if (userName.equals("") || password.equals("")) {
             Log.d("Value", " User name or password cannot be empty");
             return false;
         } else {
 
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("http://10.0.2.2:5000/api/v1/auth/login");
-            List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
-            nameValuePair.add(new BasicNameValuePair("username", userName));
-            nameValuePair.add(new BasicNameValuePair("password", password));
+            // Create an instance of retrofit
 
-            try {
-                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-            } catch (UnsupportedEncodingException e) {
-
-                e.printStackTrace();
-            }
-            try {
-                HttpResponse response = httpClient.execute(httpPost);
-                String responseString = EntityUtils.toString(response.getEntity());
-
-                if (responseString.contains("Could not log you in, Check credentials")) {
-                    return false;
-                }
-
-                JSONObject jsonResponse = new JSONObject(responseString);
-                String token = jsonResponse.getString("token");
-
-                setToken(token);
-
-                return true;
-
-
-            } catch (ClientProtocolException e) {
-                Log.d("Error", e.getMessage());
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
 
         }
         return false;
@@ -123,50 +108,6 @@ public class APICalls {
     public ArrayList<BookFields> getBooks() throws NoSuchFieldException {
 
 
-        token = getToken();
-
-        Log.d("BucketList Token", token.toString());
-
-        if (token.equals("")) {
-            Log.d("Auth ", "Not Authorized, Login in again");
-        } else {
-
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet("http://10.0.2.2:5000/api/v1/book?limit=1000");
-            httpGet.addHeader("Content-Type", "application/x-www-form-urlencoded");
-            httpGet.addHeader("Authorization", "Bearer " + token);
-
-
-            try {
-                // passing data from API
-                HttpResponse response = httpClient.execute(httpGet);
-                String responseStr = EntityUtils.toString(response.getEntity());
-
-                BookFields bookFields = new BookFields();
-
-                String newResponse = responseStr.replace("[", "").
-                        replace("{", "");
-
-
-                Log.d("New resp", newResponse);
-
-                ArrayList dataObj = new ArrayList(Arrays.asList(newResponse.split(" \\}")));
-
-                for (int index = 0; index < dataObj.size(); index++) {
-                    ArrayList data = new ArrayList(Arrays.asList(dataObj.get(index).toString().split(",")));
-                    bookData.add(bookFields);
-
-
-                }
-
-
-            } catch (ClientProtocolException e) {
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
 
 
         return bookData;
