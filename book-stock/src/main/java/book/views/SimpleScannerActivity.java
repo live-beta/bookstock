@@ -20,7 +20,6 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class SimpleScannerActivity extends BaseScannerActivity implements ZXingScannerView.ResultHandler {
     private final Context context = this;
-    BookFields bookFields = new BookFields();
     private ZXingScannerView mScannerView;
     private String title, subTitle, authors, categories, description, publishedDate, isbn, industryIdentifiers;
 
@@ -106,12 +105,14 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
         }, 2000);
 
 
-        BookFields bookFields = new BookFields(title, subTitle, categories, description, publishedDate, industryIdentifiers);
+
+        BookFields bookFields = new BookFields(title, subTitle,
+                categories, description, publishedDate, industryIdentifiers);
 
         Intent intent = new Intent(context, BookInfoActivity.class);
-        intent.putExtra("Title", bookFields.getTitle());
+        intent.putExtra("Title", bookFields.getBookName());
         intent.putExtra("subTitle", bookFields.getSubtitle());
-        intent.putExtra("categories", bookFields.getCategories());
+        intent.putExtra("categories", bookFields.getBookCategory());
         intent.putExtra("description", bookFields.getDescription());
         intent.putExtra("publishedDate", bookFields.getPublishedDate());
         intent.putExtra("isbn", isbn);

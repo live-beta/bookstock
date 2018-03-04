@@ -3,8 +3,11 @@ package book.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import android.support.design.widget.FloatingActionButton;
 
 import org.json.JSONException;
 
@@ -21,14 +23,20 @@ import java.util.ArrayList;
 
 import book.Books.BookAdapter;
 import book.api.APICalls;
+import book.fields.BookFields;
+import book.networking.NetworkCalls;
 import books.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ZXING_CAMERA_PERMISSION = 1;
-    private Class<?> mClss;
-    Button launchScanner;
-
     final Context context = this;
+    Button launchScanner;
+    private Class<?> mClss;
 
     @Override
     public void onCreate(Bundle state) {
@@ -44,12 +52,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
-        FloatingActionButton addBook =(FloatingActionButton)findViewById(R.id.addBookByScanner);
+        FloatingActionButton addBook = findViewById(R.id.addBookByScanner);
         addBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context,SimpleScannerActivity.class);
+                Intent intent = new Intent(context, SimpleScannerActivity.class);
 
                 startActivity(intent);
             }
@@ -57,17 +64,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setupToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case ZXING_CAMERA_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if(mClss != null) {
+                    if (mClss != null) {
                         Intent intent = new Intent(this, mClss);
                         startActivity(intent);
                     }
@@ -80,22 +87,44 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadBooks() throws JSONException, NoSuchFieldException {
 
-        RecyclerView recyclerView = ((Activity) context)
+        final RecyclerView recyclerView = ((Activity) context)
                 .findViewById(R.id.bookViewerRecycler);
 
         APICalls apiCalls = new APICalls();
-        ArrayList bookValues = apiCalls.getBooks();
+        final ArrayList bookValues = apiCalls.getBooks();
 
-       // Log.d("Display book va", String.valueOf(bookValues));
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:5000/api/v1/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        BookAdapter adapter = new BookAdapter(context, bookValues);
-        recyclerView.setAdapter(adapter);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        final String token = "Bearer " + sharedPreferences.getString("token", "");
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        NetworkCalls networkCalls = retrofit.create(NetworkCalls.class);
 
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        Call<ArrayList<BookFields>> getBooks = networkCalls.getBooks(token);
+
+        getBooks.enqueue(new Callback<ArrayList<BookFields>>() {
+            @Override
+            public void onResponse(Call<ArrayList<BookFields>> call, Response<ArrayList<BookFields>> response) {
+
+                BookAdapter adapter = new BookAdapter(context, response.body());
+                recyclerView.setAdapter(adapter);
+
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerView.setLayoutManager(linearLayoutManager);
+
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<BookFields>> call, Throwable t) {
+
+            }
+        });
 
 
     }

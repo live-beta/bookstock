@@ -6,10 +6,12 @@ package book.users;
 
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.StrictMode;
 import android.os.Bundle;
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -74,6 +76,15 @@ public class Login extends Activity {
 
 
                        if (response.body().getToken() != null){
+
+
+                           SharedPreferences preferences = PreferenceManager.
+                                   getDefaultSharedPreferences(context);
+                           SharedPreferences.Editor editor = preferences.edit();
+                           editor.putString("token", response.body().getToken());
+                           editor.apply();
+
+
                            Intent intent = new Intent(context, MainActivity.class);
                            startActivity(intent);
                        }else{
@@ -90,34 +101,10 @@ public class Login extends Activity {
 
                 } );
 
-
-
-
-
-
-
-////                Books books = new Books(userName.getText().toString(),
-////                        password.getText().toString());
-//
-//
-//                boolean status = books.login();
-//
-//                if (status){
-//
-//                    Toast.makeText(getApplicationContext(),"Login success",
-//                            Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(context, MainActivity.class);
-//                    startActivity(intent);
-//
-//                }else{
-//                    Toast.makeText(getApplicationContext(),"Wrong Username or Password",
-//                            Toast.LENGTH_SHORT).show();
-//                }
-
             }
         });
 
-        forgot_pass =(Button) findViewById(R.id.forgot_password);
+        forgot_pass = findViewById(R.id.forgot_password);
 
         forgot_pass.setOnClickListener(new View.OnClickListener() {
 

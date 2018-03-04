@@ -75,9 +75,6 @@ public class APICalls {
             return false;
         } else {
 
-            // Create an instance of retrofit
-
-
         }
         return false;
     }

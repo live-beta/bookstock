@@ -10,7 +10,6 @@ public class UserFields {
     private String username;
     private String password;
     private String token;
-    /* constructor for logging in */
 
     public  UserFields(String username, String password) {
         this.username = username;

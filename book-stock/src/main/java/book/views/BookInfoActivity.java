@@ -57,7 +57,6 @@ public class BookInfoActivity extends AppCompatActivity {
         final String description =intent.getStringExtra("description");
         final String publishedDate = intent.getStringExtra("publishedDate");
         final String isbn = intent.getStringExtra("isbn");
-       // String industryIdentifiers = intent.getStringExtra("industryIdentifiers");
 
         bookTitle.setText(title);
         subTitleView.setText(subTitle);
