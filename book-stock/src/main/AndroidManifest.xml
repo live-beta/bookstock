@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="me.dm7.barcodescanner.zxing.bookstock">
+  <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+  <application android:allowBackup="true"
+        android:label="@string/app_name"
+        android:icon="@drawable/ic_launcher">
+        <activity android:name="me.dm7.barcodescanner.zxing.bookstock.books.users.Login"
+                  android:theme="@style/AppTheme"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+      <activity android:name=".books.views.MainActivity"
+          android:theme="@style/AppTheme"
+          android:label="@string/app_name"/>
+
+        <activity android:name=".books.views.BookInfoActivity"
+            android:label="Book Information"
+            android:theme="@style/AppTheme"/>
+      <activity android:name=".books.views.SimpleScannerActivity"
+          android:theme="@style/AppTheme"/>
+    </application>
+</manifest>
