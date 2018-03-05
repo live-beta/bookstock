@@ -2,29 +2,43 @@ package book.views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import book.api.APICalls;
+import book.api.NetworkInstance;
+import book.fields.BookAddFields;
 import book.fields.BookFields;
+import book.networking.NetworkCalls;
 import books.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by sam on 1/7/18.
+ * Class that displays information from the scanned book and presents it in views
+ * user is able to add new book to database
  */
 
 public class BookInfoActivity extends AppCompatActivity {
 
     private Button back,postBook;
-    private TextView bookTitle,subTitleView,categoriesView,descriptionView,publishedDateView,
+    private TextView bookTitle,subTitleView,categoriesView,
+            descriptionView,publishedDateView,
             industryIdentifiersView;
     BookFields bookFields;
 
 
+
     private final Context context = this;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -49,7 +63,9 @@ public class BookInfoActivity extends AppCompatActivity {
         industryIdentifiersView = findViewById(R.id.industryIdentifiers);
 
 
+
         Intent intent = getIntent();
+        this.url = context.getResources().getString(R.string.url);
 
        final String title = intent.getStringExtra("Title");
         final String subTitle = intent.getStringExtra("subTitle");
@@ -57,7 +73,6 @@ public class BookInfoActivity extends AppCompatActivity {
         final String description =intent.getStringExtra("description");
         final String publishedDate = intent.getStringExtra("publishedDate");
         final String isbn = intent.getStringExtra("isbn");
-       // String industryIdentifiers = intent.getStringExtra("industryIdentifiers");
 
         bookTitle.setText(title);
         subTitleView.setText(subTitle);
@@ -68,14 +83,35 @@ public class BookInfoActivity extends AppCompatActivity {
 
         postBook = findViewById(R.id.addBook);
         postBook.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
 
-                APICalls apiCalls = new APICalls();
-                apiCalls.addBook(title,subTitle,categories,description,publishedDate,isbn);
 
-                Intent intent = new Intent(context,MainActivity.class);
-                startActivity(intent);
+                BookAddFields bookAddFields  = new BookAddFields(title,subTitle,categories,
+                        description,publishedDate,isbn);
+
+                NetworkInstance networkInstance = new NetworkInstance();
+                NetworkCalls networkCalls = networkInstance.networkCallsInstance(context);
+                Call<BookAddFields> addBooks = networkCalls.addBook(bookAddFields);
+
+                addBooks.enqueue(new Callback<BookAddFields>() {
+                    @Override
+                    public void onResponse(Call<BookAddFields> call,
+                                           Response<BookAddFields> response) {
+
+                        Intent intent = new Intent(context,MainActivity.class);
+                        startActivity(intent);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<BookAddFields> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(),
+                                "Unable to communicate with server",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
 
             }
         });

@@ -7,6 +7,7 @@ package book.Books;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import book.fields.BookFields;
 import books.R;
 
 
@@ -30,10 +32,7 @@ import books.R;
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookListViewAdapter> {
 
     private LayoutInflater layoutInflator;
-    private ArrayList bookData;
-
-    // Changing the values of book data
-
+    private  ArrayList<BookFields> bookData;
 
 
     /**
@@ -42,7 +41,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookListViewAd
      */
 
 
-    public BookAdapter(Context context,ArrayList bookInfo){
+    public BookAdapter(Context context,ArrayList<BookFields>  bookInfo){
 
         this.bookData = bookInfo;
         this.layoutInflator  = LayoutInflater.from(context);
@@ -78,7 +77,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookListViewAd
     public void onBindViewHolder(BookListViewAdapter holder, int position) {
 
 
-           Object  currentBookObject = bookData.get(position);
+           BookFields currentBookObject = bookData.get(position);
 
         try {
             holder.setData(currentBookObject,position);
@@ -88,11 +87,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookListViewAd
             e.printStackTrace();
         }
 
-
     }
 
     @Override
     public int getItemCount() {
+
+        Log.d("data", String.valueOf(bookData));
         return bookData.size();
     }
 
@@ -108,21 +108,24 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookListViewAd
         public BookListViewAdapter(View bookListView){
             super(bookListView);
 
-            id =(TextView)bookListView.findViewById(R.id.idView);
-            bookName =(TextView)bookListView.findViewById(R.id.bookName);
-            subTitles= (TextView)bookListView.findViewById(R.id.subTitles);
-            description = (TextView)bookListView.findViewById(R.id.description);
-            publisheDates = (TextView)bookListView.findViewById(R.id.publishedDates);
+            id = bookListView.findViewById(R.id.idView);
+            bookName = bookListView.findViewById(R.id.bookName);
+            subTitles= bookListView.findViewById(R.id.subTitles);
+            description = bookListView.findViewById(R.id.description);
+            publisheDates = bookListView.findViewById(R.id.publishedDates);
 
-            industryIdentifiers = (TextView)bookListView.findViewById(R.id.industryIdentifiers);
+            industryIdentifiers = bookListView.findViewById(R.id.industryIdentifiers);
 
 
 
         }
 
-        public void setData(final Object current, final int position) throws JSONException, NoSuchFieldException {
+        public void setData(final BookFields current, final int position) throws JSONException, NoSuchFieldException {
 
             this.position = position;
+            bookName.setText(current.getBookName());
+
+
         }
 
     }

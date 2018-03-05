@@ -37,7 +37,6 @@ public class BookListView extends RecyclerView.Adapter<BookListView.BookViewAdap
     @Override
     public BookViewAdapter onCreateViewHolder(ViewGroup parent, int viewType){
 
-        // define the view from a card view activity layout
 
         View view  = layoutInflater.inflate(R.layout.book_item_views, parent,false);
 

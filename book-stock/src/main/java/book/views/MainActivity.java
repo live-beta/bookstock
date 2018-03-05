@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,22 +14,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import android.support.design.widget.FloatingActionButton;
 
 import org.json.JSONException;
 
 import java.util.ArrayList;
 
 import book.Books.BookAdapter;
-import book.api.APICalls;
+
+import book.api.NetworkInstance;
+import book.fields.BookFields;
+import book.networking.NetworkCalls;
 import books.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ZXING_CAMERA_PERMISSION = 1;
-    private Class<?> mClss;
-    Button launchScanner;
-
     final Context context = this;
+    Button launchScanner;
+    private Class<?> mClss;
 
     @Override
     public void onCreate(Bundle state) {
@@ -44,12 +49,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
-        FloatingActionButton addBook =(FloatingActionButton)findViewById(R.id.addBookByScanner);
+        FloatingActionButton addBook = findViewById(R.id.addBookByScanner);
         addBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context,SimpleScannerActivity.class);
+                Intent intent = new Intent(context, SimpleScannerActivity.class);
 
                 startActivity(intent);
             }
@@ -57,22 +61,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setupToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
-
     @Override
-    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case ZXING_CAMERA_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if(mClss != null) {
+                    if (mClss != null) {
                         Intent intent = new Intent(this, mClss);
                         startActivity(intent);
                     }
                 } else {
-                    Toast.makeText(this, "Please grant camera permission to use the QR Scanner", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,
+                            "Please grant camera permission to use the QR Scanner",
+                            Toast.LENGTH_SHORT).show();
                 }
                 return;
         }
@@ -80,22 +85,37 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadBooks() throws JSONException, NoSuchFieldException {
 
-        RecyclerView recyclerView = ((Activity) context)
+        final RecyclerView recyclerView = ((Activity) context)
                 .findViewById(R.id.bookViewerRecycler);
 
-        APICalls apiCalls = new APICalls();
-        ArrayList bookValues = apiCalls.getBooks();
+        NetworkInstance networkInstance = new NetworkInstance();
+        NetworkCalls networkCalls = networkInstance.networkCallsInstance(context);
 
-       // Log.d("Display book va", String.valueOf(bookValues));
+        Call<ArrayList<BookFields>> getBooks = networkCalls.getBooks();
 
-        BookAdapter adapter = new BookAdapter(context, bookValues);
-        recyclerView.setAdapter(adapter);
+        getBooks.enqueue(new Callback<ArrayList<BookFields>>() {
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+            @Override
 
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+            public void onResponse(Call<ArrayList<BookFields>> call,
+                                   Response<ArrayList<BookFields>> response) {
+
+                BookAdapter adapter = new BookAdapter(context, response.body());
+                recyclerView.setAdapter(adapter);
+
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerView.setLayoutManager(linearLayoutManager);
+
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<BookFields>> call, Throwable t) {
+
+            }
+        });
 
 
     }

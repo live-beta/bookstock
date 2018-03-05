@@ -1,84 +1,66 @@
 package book.fields;
 
-/**
- * Book fields, class with the book model
- */
+
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class BookFields {
 
-    private String title, subTitle, authors, categories, description, publishedDate, industryIdentifiers;
+    @SerializedName("book_category")
+    @Expose
+    private String bookCategory;
+    @SerializedName("book_isbn")
+    @Expose
+    private String bookIsbn;
+    @SerializedName("book_name")
+    @Expose
+    private String bookName;
+    @SerializedName("description")
+    @Expose
+    private String description;
+    @SerializedName("publishedDate")
+    @Expose
+    private String publishedDate;
+    @SerializedName("subtitle")
+    @Expose
+    private String subtitle;
 
+    public BookFields(String bookName,String subTitle, String bookCategory,
+                      String description, String publishedDate, String
+                              bookIsbn) {
 
-    private String id, userId;
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    private String isbn;
-    public BookFields(String title,String subTitle, String categories,
-                      String description,String publishedDate,String industryIdentifiers) {
-
-        this.title = title;
-        this.subTitle = subTitle;
-        this.categories = categories;
+        this.bookName = bookName;
+        this.subtitle = subTitle;
+        this.bookCategory = bookCategory;
         this.description = description;
         this.publishedDate = publishedDate;
-        this.industryIdentifiers = industryIdentifiers;
+        this.bookIsbn = bookIsbn;
 
     }
 
-    public BookFields() {
-
+    public String getBookCategory() {
+        return bookCategory;
     }
 
-    public String getId() {
-        return id;
+    public void setBookCategory(String bookCategory) {
+        this.bookCategory = bookCategory;
     }
 
-    public void setId(String idEntry) {
-        this.id = idEntry;
+    public String getBookIsbn() {
+        return bookIsbn;
     }
 
-    public void setUserId(String userIdEntry) {
-        this.userId = userIdEntry;
+    public void setBookIsbn(String bookIsbn) {
+        this.bookIsbn = bookIsbn;
     }
 
-
-    public String getAuthors() {
-        return authors;
+    public String getBookName() {
+        return bookName;
     }
 
-    public void setAuthors(String authors) {
-        this.authors = authors;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getSubtitle() {
-        return subTitle;
-    }
-
-    public void setSubtitle(String subTitle) {
-        this.subTitle = subTitle;
-    }
-
-    public String getCategories() {
-        return categories;
-    }
-
-    public void setCategories(String categories) {
-        this.categories = categories;
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 
     public String getDescription() {
@@ -97,11 +79,12 @@ public class BookFields {
         this.publishedDate = publishedDate;
     }
 
-    public String getIndustryIdentifiers() {
-        return industryIdentifiers;
+    public String getSubtitle() {
+        return subtitle;
     }
 
-    public void setIndustryIdentifiers(String industryIdentifiers) {
-        this.industryIdentifiers = industryIdentifiers;
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
     }
+
 }
