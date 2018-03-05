@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -98,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = PreferenceManager.
+                getDefaultSharedPreferences(context);
         final String token = "Bearer " + sharedPreferences.getString("token", "");
 
         NetworkCalls networkCalls = retrofit.create(NetworkCalls.class);
@@ -106,8 +106,11 @@ public class MainActivity extends AppCompatActivity {
         Call<ArrayList<BookFields>> getBooks = networkCalls.getBooks(token);
 
         getBooks.enqueue(new Callback<ArrayList<BookFields>>() {
+
             @Override
-            public void onResponse(Call<ArrayList<BookFields>> call, Response<ArrayList<BookFields>> response) {
+
+            public void onResponse(Call<ArrayList<BookFields>> call,
+                                   Response<ArrayList<BookFields>> response) {
 
                 BookAdapter adapter = new BookAdapter(context, response.body());
                 recyclerView.setAdapter(adapter);
