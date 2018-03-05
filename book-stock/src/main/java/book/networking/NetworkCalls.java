@@ -6,6 +6,7 @@ package book.networking;
 
 import java.util.ArrayList;
 
+import book.fields.BookAddFields;
 import book.fields.BookFields;
 import book.fields.UserFields;
 import retrofit2.Call;
@@ -24,5 +25,9 @@ public interface NetworkCalls {
 
     @GET("books?limit=1000")
     Call<ArrayList<BookFields>> getBooks(@Header("Authorization") String token);
+
+    @POST("books")
+    Call<BookAddFields> addBook(@Header("Authorization") String token, @Body BookAddFields bookFields);
+
 
 }

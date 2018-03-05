@@ -19,9 +19,6 @@ public class BookFields {
     @SerializedName("description")
     @Expose
     private String description;
-    @SerializedName("id")
-    @Expose
-    private Integer id;
     @SerializedName("publishedDate")
     @Expose
     private String publishedDate;
@@ -72,14 +69,6 @@ public class BookFields {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getPublishedDate() {

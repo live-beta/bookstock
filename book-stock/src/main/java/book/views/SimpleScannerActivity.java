@@ -29,7 +29,7 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
         setContentView(R.layout.activity_simple_scanner);
         setupToolbar();
 
-        ViewGroup contentFrame = (ViewGroup) findViewById(R.id.content_frame);
+        ViewGroup contentFrame = findViewById(R.id.content_frame);
         mScannerView = new ZXingScannerView(this);
         contentFrame.addView(mScannerView);
     }
@@ -63,7 +63,6 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
          *
          */
         try {
-            // Passing infrmation to data itesm
 
             JSONObject bookObject = apiCalls.getBookInfo(rawResult.getText());
 
@@ -75,16 +74,34 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
                     getJSONObject(0).getJSONObject("volumeInfo").getString("title")));
 
 
-            subTitle = bookObject.getJSONArray("items").getJSONObject(0)
-                    .getJSONObject("volumeInfo").getString("subtitle");
-            categories = bookObject.getJSONArray("items").getJSONObject(0)
-                    .getJSONObject("volumeInfo").getString("categories");
-            description = bookObject.getJSONArray("items").getJSONObject(0)
-                    .getJSONObject("volumeInfo").getString("description");
-            publishedDate = bookObject.getJSONArray("items").getJSONObject(0)
-                    .getJSONObject("volumeInfo").getString("publishedDate");
+            try {
+                subTitle = bookObject.getJSONArray("items").getJSONObject(0)
+                        .getJSONObject("volumeInfo").getString("subtitle");
+            }catch (Exception e){
+                Log.d("Setting subtitle ", e.getMessage());
+                subTitle = "Not presented";
 
-            //
+            }
+            try {
+                categories = bookObject.getJSONArray("items").getJSONObject(0)
+                        .getJSONObject("volumeInfo").getString("categories");
+            }catch (Exception e){
+                categories = "Not presented";
+            }
+            try {
+                description = bookObject.getJSONArray("items").getJSONObject(0)
+                        .getJSONObject("volumeInfo").getString("description");
+            }catch (Exception e){
+                description = "Not presented";
+            }
+            try {
+                publishedDate = bookObject.getJSONArray("items").getJSONObject(0)
+                        .getJSONObject("volumeInfo").getString("publishedDate");
+            }catch (Exception e){
+                publishedDate = "Not presented";
+            }
+
+
 
         } catch (JSONException e) {
             e.printStackTrace();

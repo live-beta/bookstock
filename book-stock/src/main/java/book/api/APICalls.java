@@ -84,12 +84,15 @@ public class APICalls {
 
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet("https://www.googleapis.com/book/v1/volumes?q=isbn:" + isbn);
+        /* Making a get link for the requested volume*/
+        HttpGet httpGet = new HttpGet("https://www.googleapis.com/books/v1/volumes?q=ISBN:" + isbn);
 
 
         try {
             HttpResponse response = httpClient.execute(httpGet);
             String responseStr = EntityUtils.toString(response.getEntity());
+
+            Log.d("book info",responseStr);
 
             bookInfo = new JSONObject(responseStr);
 
@@ -105,14 +108,16 @@ public class APICalls {
     public ArrayList<BookFields> getBooks() throws NoSuchFieldException {
 
 
-
-
         return bookData;
     }
 
 
     public boolean addBook(String title, String subTitle, String categories, String description,
                            String publishedDate, String isbn) {
+
+
+        /* Making api call for adding a new book*/
+
 
         token = getToken();
         if (token.equals("")) {
