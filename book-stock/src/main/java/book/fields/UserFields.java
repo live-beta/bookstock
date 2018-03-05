@@ -15,8 +15,6 @@ public class UserFields {
         this.username = username;
         this.password = password;
     }
-
-
     public void setUserName(String name){
         this.username = name;
     }

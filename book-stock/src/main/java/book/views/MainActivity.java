@@ -3,10 +3,8 @@ package book.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,15 +20,14 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 import book.Books.BookAdapter;
-import book.api.APICalls;
+
+import book.api.NetworkInstance;
 import book.fields.BookFields;
 import book.networking.NetworkCalls;
 import books.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ZXING_CAMERA_PERMISSION = 1;
@@ -78,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 } else {
-                    Toast.makeText(this, "Please grant camera permission to use the QR Scanner", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,
+                            "Please grant camera permission to use the QR Scanner",
+                            Toast.LENGTH_SHORT).show();
                 }
                 return;
         }
@@ -89,21 +88,10 @@ public class MainActivity extends AppCompatActivity {
         final RecyclerView recyclerView = ((Activity) context)
                 .findViewById(R.id.bookViewerRecycler);
 
-        APICalls apiCalls = new APICalls();
-        final ArrayList bookValues = apiCalls.getBooks();
+        NetworkInstance networkInstance = new NetworkInstance();
+        NetworkCalls networkCalls = networkInstance.networkCallsInstance(context);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:5000/api/v1/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        SharedPreferences sharedPreferences = PreferenceManager.
-                getDefaultSharedPreferences(context);
-        final String token = "Bearer " + sharedPreferences.getString("token", "");
-
-        NetworkCalls networkCalls = retrofit.create(NetworkCalls.class);
-
-        Call<ArrayList<BookFields>> getBooks = networkCalls.getBooks(token);
+        Call<ArrayList<BookFields>> getBooks = networkCalls.getBooks();
 
         getBooks.enqueue(new Callback<ArrayList<BookFields>>() {
 

@@ -24,10 +24,10 @@ public interface NetworkCalls {
     Call<UserFields> LoginCall(@Body UserFields userFields);
 
     @GET("books?limit=1000")
-    Call<ArrayList<BookFields>> getBooks(@Header("Authorization") String token);
+    Call<ArrayList<BookFields>> getBooks();
 
     @POST("books")
-    Call<BookAddFields> addBook(@Header("Authorization") String token, @Body BookAddFields bookFields);
+    Call<BookAddFields> addBook(@Body BookAddFields bookFields);
 
 
 }

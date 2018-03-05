@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import book.api.APICalls;
+import book.api.NetworkInstance;
+import book.fields.BookAddFields;
 import book.fields.UserFields;
 import book.networking.NetworkCalls;
 import book.views.MainActivity;
@@ -51,22 +53,20 @@ public class Login extends Activity {
         }
 
         userName =findViewById(R.id.uname);
-        password =findViewById(R.id.upass);
-        login = findViewById(R.id.login);
+                password =findViewById(R.id.upass);
+                login = findViewById(R.id.login);
 
-        login.setOnClickListener(new View.OnClickListener() {
+                login.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
+
+                UserFields userFields = new UserFields(userName.getText().toString(),
+                        password.getText().toString());
 
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://10.0.2.2:5000/api/v1/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                NetworkCalls networkCalls = retrofit.create(NetworkCalls.class);
-                UserFields userFields = new UserFields(userName.getText().toString(),password.getText().toString());
+                NetworkInstance networkInstance = new NetworkInstance();
+                NetworkCalls networkCalls = networkInstance.networkCallsInstance(context);
 
                 Call<UserFields> loginCall = networkCalls.LoginCall(userFields);
                 loginCall.enqueue(new Callback<UserFields>(){

@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import book.api.NetworkInstance;
 import book.fields.BookAddFields;
 import book.fields.BookFields;
 import book.networking.NetworkCalls;
@@ -34,7 +36,9 @@ public class BookInfoActivity extends AppCompatActivity {
     BookFields bookFields;
 
 
+
     private final Context context = this;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -59,7 +63,9 @@ public class BookInfoActivity extends AppCompatActivity {
         industryIdentifiersView = findViewById(R.id.industryIdentifiers);
 
 
+
         Intent intent = getIntent();
+        this.url = context.getResources().getString(R.string.url);
 
        final String title = intent.getStringExtra("Title");
         final String subTitle = intent.getStringExtra("subTitle");
@@ -81,17 +87,13 @@ public class BookInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://10.0.2.2:5000/api/v1/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
+
                 BookAddFields bookAddFields  = new BookAddFields(title,subTitle,categories,
                         description,publishedDate,isbn);
-                SharedPreferences sharedPreferences = PreferenceManager.
-                        getDefaultSharedPreferences(context);
-                final String token = "Bearer " + sharedPreferences.getString("token","");
-                NetworkCalls networkCalls = retrofit.create(NetworkCalls.class);
-                Call<BookAddFields> addBooks = networkCalls.addBook(token,bookAddFields);
+
+                NetworkInstance networkInstance = new NetworkInstance();
+                NetworkCalls networkCalls = networkInstance.networkCallsInstance(context);
+                Call<BookAddFields> addBooks = networkCalls.addBook(bookAddFields);
 
                 addBooks.enqueue(new Callback<BookAddFields>() {
                     @Override
